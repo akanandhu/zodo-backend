@@ -1,6 +1,8 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-
+import { BeforeInsert, Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import bcrypt from "bcrypt"
+import { Roles } from "src/roles/entity/roles.entity";
 export type GenderType = "m" | "f" | "o"
+import { Relation } from "typeorm";
 
 @Entity({ name: "users" })
 export class Users {
@@ -13,11 +15,11 @@ export class Users {
     @Column({ nullable: false })
     last_name: string;
 
-    @Column({type: "enum", enum: ["m", "f", "o"]})
+    @Column({ type: "enum", enum: ["m", "f", "o"] })
     gender: GenderType;
 
-    @Column({ nullable: false })
-    role: string;
+    @ManyToMany((type) => Roles, (role) => role.title)
+    role: Relation<Roles[]>;
 
     @Column({ nullable: false, unique: true })
     email?: string;
@@ -28,6 +30,9 @@ export class Users {
     @Column({ nullable: true })
     password?: string;
 
+    @Column({ type: "boolean" })
+    is_active?: boolean;
+
     @CreateDateColumn()
     created_at: Date;
 
@@ -36,4 +41,10 @@ export class Users {
 
     @DeleteDateColumn()
     deleted_at: Date
+
+    @BeforeInsert()
+    async hashPass() {
+        this.password = await bcrypt.hash(this.password, 10)
+    }
+
 }

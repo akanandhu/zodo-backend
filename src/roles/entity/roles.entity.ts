@@ -1,12 +1,16 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Users } from "src/users/entity/users.entity";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn, Relation, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: "roles" })
-export class Users {
+export class Roles {
     @PrimaryGeneratedColumn("uuid")
     id: string;
 
     @Column({ nullable: false })
     title: string;
+
+    @ManyToMany((type) => Users, (user) => user.id)
+    users: Relation<Users[]>;
 
     @CreateDateColumn()
     created_at: Date;
