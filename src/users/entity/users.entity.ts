@@ -1,4 +1,5 @@
 import { BeforeInsert, Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Exclude } from 'class-transformer'
 import bcrypt from "bcrypt"
 import { Roles } from "src/roles/entity/roles.entity";
 export type GenderType = "m" | "f" | "o"
@@ -32,6 +33,10 @@ export class Users {
 
     @Column({ type: "boolean" })
     is_active?: boolean;
+
+    @Column({ nullable: true })
+    @Exclude()
+    refresh_token: string;
 
     @CreateDateColumn()
     created_at: Date;

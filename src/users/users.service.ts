@@ -7,7 +7,7 @@ import { Repository } from 'typeorm';
 export class UsersService {
     constructor(@InjectRepository(Users) private readonly userRepo: Repository<Users>) { }
 
-    async findOneWithUsername(username: string) {
-        return await this.userRepo.findOne({ where: { email: username } })
+    async findOneWithEmail(email: string) {
+        return await this.userRepo.findOne({ where: { email } })
     }
 }
