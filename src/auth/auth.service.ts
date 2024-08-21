@@ -4,22 +4,24 @@ import * as bcrypt from 'bcrypt'
 import { Users } from 'src/users/entity/users.entity';
 import { SignInDto } from './dto/sign-in.dto';
 import * as jwt from 'jsonwebtoken'
-import { ConfigService } from '@nestjs/config';
 import { Repository } from 'typeorm';
 import { UtilsService } from 'src/utils/utils.service';
 import { ResponseService } from 'src/response/response.service';
 import { InjectRepository } from '@nestjs/typeorm';
 
+require("dotenv").config();
+
 @Injectable()
 export class AuthService {
     constructor(private readonly userService: UsersService,
-        @InjectRepository(Users) private userRepository: Repository<Users>, private configService: ConfigService, private utilsService: UtilsService, private responseService: ResponseService) { }
+        @InjectRepository(Users) private userRepository: Repository<Users>, private utilsService: UtilsService, private responseService: ResponseService) { }
 
     async signIn(signInDto: SignInDto, headers: any) {
         const user = await this.validateUser(signInDto, headers)
         if (user) {
             const tokens = await this.getTokens((await user).id, (await user).email)
             await this.updateRefreshToken(user.id, tokens.refreshToken)
+            return this.responseService.successResponse('Login Success', { tokens, id: user.id })
         } else {
             throw new HttpException({
                 status: HttpStatus.NOT_FOUND,
@@ -42,17 +44,17 @@ export class AuthService {
         const accessToken = jwt.sign({
             sub: userId,
             username
-        }, this.configService.get("JWT_ACCESS_SECRET"),
+        }, process.env.JWT_ACCESS_SECRET,
             {
-                expiresIn: this.configService.get("JWT_ACCESS_EXPIRY")
+                expiresIn: process.env.JWT_ACCESS_EXPIRY
             }
         )
 
         const refreshToken = jwt.sign({
             sub: userId,
             username
-        }, this.configService.get("JWT_REFRESH_SECRET"), {
-            expiresIn: this.configService.get("JWT_EXPIRY_EXPIRY")
+        }, process.env.JWT_REFRESH_SECRET, {
+            expiresIn: process.env.JWT_EXPIRY_EXPIRY
         })
 
         const combinedToken = jwt.sign({
@@ -60,8 +62,8 @@ export class AuthService {
             username,
             accessToken,
             refreshToken
-        }, this.configService.get('JWT_ACCESS_SECRET'), {
-            expiresIn: this.configService.get("JWT_ACCESS_EXPIRY")
+        }, process.env.JWT_ACCESS_SECRET, {
+            expiresIn: process.env.JWT_ACCESS_EXPIRY
         })
 
         return {

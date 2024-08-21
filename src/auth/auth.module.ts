@@ -18,6 +18,6 @@ import { ResponseModule } from 'src/response/response.module';
       expiresIn: process.env.JWT_ACCESS_EXPIRY,
 
     }
-  }), TypeOrmModule.forFeature([Users]), ConfigModule, UtilsModule, ResponseModule]
+  }), TypeOrmModule.forFeature([Users]), UtilsModule, ResponseModule]
 })
 export class AuthModule { }

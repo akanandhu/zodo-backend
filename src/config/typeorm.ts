@@ -13,6 +13,7 @@ export const config = {
     database: `${process.env.POSTGRES_DATABASE}`,
     entities: ["dist/**/*.entity{.ts,.js}"],
     migrations: ["dist/migrations/*{.ts,.js}"],
+    seeds: ['dist/database/seeds/**/*.js'],
     autoLoadEntities: true,
     synchronize: false,
 }
