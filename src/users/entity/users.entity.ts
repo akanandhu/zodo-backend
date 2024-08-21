@@ -36,7 +36,7 @@ export class Users {
 
     @Column({ nullable: true })
     @Exclude()
-    refresh_token: string;
+    refresh_token?: string;
 
     @CreateDateColumn()
     created_at: Date;

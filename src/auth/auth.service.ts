@@ -1,24 +1,30 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcrypt'
 import { Users } from 'src/users/entity/users.entity';
-import { JwtService } from '@nestjs/jwt';
 import { SignInDto } from './dto/sign-in.dto';
 import * as jwt from 'jsonwebtoken'
 import { ConfigService } from '@nestjs/config';
 import { Repository } from 'typeorm';
 import { UtilsService } from 'src/utils/utils.service';
 import { ResponseService } from 'src/response/response.service';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class AuthService {
-    constructor(private readonly userService: UsersService, private userRepository: Repository<Users>, private configService: ConfigService, private utilsService: UtilsService, private responseService: ResponseService) { }
+    constructor(private readonly userService: UsersService,
+        @InjectRepository(Users) private userRepository: Repository<Users>, private configService: ConfigService, private utilsService: UtilsService, private responseService: ResponseService) { }
 
     async signIn(signInDto: SignInDto, headers: any) {
         const user = await this.validateUser(signInDto, headers)
         if (user) {
             const tokens = await this.getTokens((await user).id, (await user).email)
             await this.updateRefreshToken(user.id, tokens.refreshToken)
+        } else {
+            throw new HttpException({
+                status: HttpStatus.NOT_FOUND,
+                error: "User not found",
+            }, HttpStatus.NOT_FOUND)
         }
     }
 

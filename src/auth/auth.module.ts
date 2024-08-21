@@ -3,6 +3,11 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { UsersService } from 'src/users/users.service';
 import { JwtModule, JwtService } from '@nestjs/jwt';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Users } from 'src/users/entity/users.entity';
+import { ConfigModule } from '@nestjs/config';
+import { UtilsModule } from 'src/utils/utils.module';
+import { ResponseModule } from 'src/response/response.module';
 
 @Module({
   providers: [AuthService, UsersService, JwtService],
@@ -13,6 +18,6 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
       expiresIn: process.env.JWT_ACCESS_EXPIRY,
 
     }
-  })]
+  }), TypeOrmModule.forFeature([Users]), ConfigModule, UtilsModule, ResponseModule]
 })
 export class AuthModule { }
