@@ -12,9 +12,11 @@ export class RolesService {
 
   async create(createRoleDto: CreateRoleDto) {
     const roleData = new Roles();
-    roleData.title = createRoleDto.name
+    console.log("Role data",roleData);
+    roleData.name = createRoleDto.name
     roleData.created_at = new Date();
     return await this.rolesRepository.save(roleData)
+    // return roleData;
   }
 
   async createOrSkip(createRoleDto: CreateRoleDto) {
@@ -37,7 +39,7 @@ export class RolesService {
   async findAll(role: string) {
     const roles = await this.rolesRepository.find({
       where: {
-        title: role
+        name: role
       }
     })
 

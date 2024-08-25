@@ -1,12 +1,10 @@
-import { BeforeInsert, Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { Exclude } from 'class-transformer'
-import bcrypt from "bcrypt"
+import { Exclude } from "class-transformer";
 import { Roles } from "src/roles/entity/roles.entity";
-export type GenderType = "m" | "f" | "o"
-import { Relation } from "typeorm";
-
-@Entity({ name: "users" })
-export class Users {
+import { BeforeInsert, Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToMany, PrimaryGeneratedColumn, Relation, UpdateDateColumn } from "typeorm";
+import bcrypt from "bcrypt"
+import { GenderType } from "src/users/entity/users.entity";
+@Entity({ name: "doctors" })
+export class Doctors {
     @PrimaryGeneratedColumn("uuid")
     id: string;
 
@@ -29,10 +27,16 @@ export class Users {
     phone?: string;
 
     @Column({ nullable: true })
+    specilization?: string;
+
+    @Column({ nullable: true })
     password?: string;
 
     @Column({ type: "boolean" })
     is_active?: boolean;
+
+    @Column({ nullable: false })
+    doctor_type?: string;
 
     @Column({ nullable: true })
     @Exclude()

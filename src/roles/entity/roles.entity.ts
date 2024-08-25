@@ -7,7 +7,7 @@ export class Roles {
     id: string;
 
     @Column({ nullable: false })
-    title: string;
+    name: string;
 
     @ManyToMany((type) => Users, (user) => user.id)
     users: Relation<Users[]>;
