@@ -6,15 +6,32 @@ enum GenderType {
   FEMALE = 'f',
   OTHER = 'o',
 }
-export class CreateDoctorDto {
-  
+export class CreateUserDto {
+  @IsString()
+  first_name: string;
+
+  @IsString()
+  last_name: string;
+
+  @IsEnum(GenderType)
+  gender: GenderType;
+
+  @IsEmail()
+  email: string;
 
   @IsOptional()
   @IsString()
-  specilisation?: string;
+  phone?: string;
+
+  @IsOptional()
+  @IsString()
+  password?: string;
 
   @IsOptional()
   @IsBoolean()
-  is_online?: boolean;
+  is_active?: boolean;
 
+  @IsOptional()
+  @IsString({ each: true })
+  roles?: string[]; // Assuming you'll send role names
 }
