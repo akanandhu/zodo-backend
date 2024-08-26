@@ -9,13 +9,6 @@ export class UsersController {
         return 'user log'
     }
      
-    //Add users
-    @Post('signup')
-    signUp(@Body() signInDto: Record<string, any>){
-        return this.usersService.signUp(signInDto.username, signInDto.password, signInDto.isUserType);
-        // console.log(signInDto);
-        // return this.UsersService.signIn(signInDto.username, signInDto.password);
-        // return "created successfully"
-    }
+   
 
 }
