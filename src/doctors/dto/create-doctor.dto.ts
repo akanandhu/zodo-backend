@@ -7,7 +7,9 @@ enum GenderType {
   OTHER = 'o',
 }
 export class CreateDoctorDto {
-  
+  @IsOptional()
+  @IsString()
+  user_id?: string;  
 
   @IsOptional()
   @IsString()

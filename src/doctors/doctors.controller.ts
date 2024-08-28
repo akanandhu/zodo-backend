@@ -1,11 +1,18 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Headers, Post, Req } from '@nestjs/common';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { DoctorsService } from './doctors.service';
 import { CreateUserDto } from 'src/users/dto/create-user-dto';
+import { AuthService } from 'src/auth/auth.service';
+import { SignInDto } from 'src/auth/dto/sign-in.dto';
+import { Request } from 'express';
 
 @Controller('doctors')
 export class DoctorsController {
-  constructor(private readonly doctorsServices: DoctorsService) {}
+  constructor(
+    private readonly doctorsServices: DoctorsService,
+    private readonly authServices: AuthService,
+  ) {}
+  // Doctor signup controller
   @Post('signup')
   create(
     @Body() userSignupDto: CreateUserDto,
@@ -26,4 +33,16 @@ export class DoctorsController {
       is_online,
     );
   }
+  // Doctor signin controller
+  @Post('login')
+  login(@Body() signIndto: SignInDto, @Headers() headers: any) {
+    console.log(signIndto);
+    return this.authServices.signIn(signIndto, headers)
+  }
+
+  @Post("logout")
+    logout(@Req() req: Request) {
+      console.log(this.authServices);
+        // return this.authServices.logout(req.user['sub'])
+    }
 }

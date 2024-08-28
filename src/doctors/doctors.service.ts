@@ -11,7 +11,7 @@ import { GenderType, Users } from 'src/users/entity/users.entity';
 @Injectable()
 export class DoctorsService {
   constructor(
-    @InjectRepository(Users) private userRepo: Repository<Users>,
+    @InjectRepository(Users) private readonly userRepo: Repository<Users>,
     @InjectRepository(Doctors) private readonly doctorRepo: Repository<Doctors>,
   ) {}
 
@@ -40,6 +40,7 @@ export class DoctorsService {
       await this.userRepo.save(user);
       // Add doctor's attributes to doctor table
       const doctor = await this.doctorRepo.create({
+        user_id:user.id,
         specilisation,
         is_online
       });

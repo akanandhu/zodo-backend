@@ -18,6 +18,7 @@ import { ResponseModule } from 'src/response/response.module';
       expiresIn: process.env.JWT_ACCESS_EXPIRY,
 
     }
-  }), TypeOrmModule.forFeature([Users]), UtilsModule, ResponseModule]
+  }), TypeOrmModule.forFeature([Users]), UtilsModule, ResponseModule],
+  exports:[AuthService]
 })
 export class AuthModule { }

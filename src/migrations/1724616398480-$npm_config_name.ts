@@ -14,6 +14,11 @@ export class Migrations1724616398480 implements MigrationInterface {
                     default: 'uuid_generate_v4()',
                 },
                 {
+                    name: 'user_id',
+                    type: 'varchar',
+                    isNullable: true,
+                },
+                {
                     name: 'specilisation',
                     type: 'varchar',
                     isNullable: true,

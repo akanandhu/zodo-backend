@@ -84,7 +84,6 @@ export class AuthService {
 
     async logout(userId: string): Promise<Object> {
         await this.updateRefreshToken(userId, null)
-
         return this.responseService.successResponse('User logged out')
     }
 }
