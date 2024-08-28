@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcrypt'
 import { Users } from 'src/users/entity/users.entity';
@@ -23,10 +23,7 @@ export class AuthService {
             await this.updateRefreshToken(user.id, tokens.refreshToken)
             return this.responseService.successResponse('Login Success', { tokens, id: user.id })
         } else {
-            throw new HttpException({
-                status: HttpStatus.NOT_FOUND,
-                error: "User not found",
-            }, HttpStatus.NOT_FOUND)
+            throw new NotFoundException();
         }
     }
 

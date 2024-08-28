@@ -34,6 +34,11 @@ export class RolesService {
     }
   }
 
+  async listAll() {
+    const roles = await this.rolesRepository.find();
+    return roles;
+  }
+
   async findAll(role: string) {
     const roles = await this.rolesRepository.find({
       where: {
@@ -58,7 +63,6 @@ export class RolesService {
 
   async createRoles(role: string) {
     if (this.findAll(role)) {
-      console.log("hitting")
       return "Role Already Exists"
     } else {
       console.log("hitting-else")
