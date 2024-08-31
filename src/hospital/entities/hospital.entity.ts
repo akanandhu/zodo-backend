@@ -30,8 +30,8 @@ export class Hospital {
     @Column("simple-json", { nullable: true })
     departments: string[];
 
-    @Column({ nullable: false, default: "inactive" })
-    current: "active" | "inactive";
+    @Column({ nullable: false, default: "pending" })
+    current: "active" | "pending" | "rejected";
 
     @Column({ type: "boolean", default: false })
     isDisabled: boolean;

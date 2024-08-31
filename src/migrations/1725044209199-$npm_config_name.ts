@@ -1,83 +1,31 @@
 import { MigrationInterface, QueryRunner, TableColumn } from "typeorm";
 
-export class CreateHospitalTable1725044209199 implements MigrationInterface {
+export class UpdateHospitalCurrentColumn1725044209201 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
-        // Adding new columns
-        await queryRunner.addColumns("hospital", [
+        // Altering the "current" column to include the new statuses
+        await queryRunner.changeColumn(
+            "hospital",
+            "current",
             new TableColumn({
-                name: "logo",
+                name: "current",
                 type: "varchar",
-                isNullable: true,
-            }),
-            new TableColumn({
-                name: "billingAddress",
-                type: "json",
                 isNullable: false,
-            }),
-            new TableColumn({
-                name: "website",
-                type: "varchar",
-                isNullable: true,
-            }),
-            new TableColumn({
-                name: "email",
-                type: "varchar",
-                isNullable: true,
-            }),
-            new TableColumn({
-                name: "isDisabled",
-                type: "boolean",
-                default: false,
-            }),
-            new TableColumn({
-                name: "isDeactivated",
-                type: "boolean",
-                default: false,
-            }),
-            new TableColumn({
-                name: "fastTag",
-                type: "json",
-                isNullable: true,
-            }),
-            new TableColumn({
-                name: "documents",
-                type: "json",
-                isNullable: true,
-            }),
-        ]);
-
-        // Altering existing columns
-        await queryRunner.changeColumn(
-            "hospital",
-            "address",
-            new TableColumn({
-                name: "address",
-                type: "json",
-                isNullable: false,
-            })
-        );
-
-        await queryRunner.changeColumn(
-            "hospital",
-            "admins",
-            new TableColumn({
-                name: "admins",
-                type: "json",
-                isNullable: true,
-            })
-        );
-
-        await queryRunner.changeColumn(
-            "hospital",
-            "departments",
-            new TableColumn({
-                name: "departments",
-                type: "json",
-                isNullable: true,
+                default: "'pending'", // Default value set to "pending"
             })
         );
     }
+
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable("hospital");
+        // Reverting the "current" column back to the original state (if necessary)
+        await queryRunner.changeColumn(
+            "hospital",
+            "current",
+            new TableColumn({
+                name: "current",
+                type: "varchar",
+                isNullable: false,
+                default: "'inactive'", // Revert default value to "inactive"
+            })
+        );
     }
 }
