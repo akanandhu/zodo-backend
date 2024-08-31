@@ -7,9 +7,10 @@ import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './auth/auth.module';
 import { ResponseModule } from './response/response.module';
 import { SeederModule } from './seeders/seeders.module';
+import { HospitalModule } from './hospital/hospital.module';
 
 @Module({
-  imports: [UsersModule, RolesModule, DatabaseModule, AuthModule, ResponseModule, SeederModule],
+  imports: [UsersModule, RolesModule, DatabaseModule, AuthModule, ResponseModule, SeederModule, HospitalModule],
   controllers: [AppController],
   providers: [AppService],
 })
