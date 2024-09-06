@@ -7,11 +7,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Doctors } from './entity/doctors.entity';
 import { Repository } from 'typeorm';
 import { GenderType, Users } from 'src/users/entity/users.entity';
+import { ResponseService } from 'src/response/response.service';
 
 @Injectable()
 export class DoctorsService {
   constructor(
-    @InjectRepository(Users) private readonly userRepo: Repository<Users>,
+    @InjectRepository(Users) private readonly userRepo: Repository<Users>,private responseService: ResponseService,
     @InjectRepository(Doctors) private readonly doctorRepo: Repository<Doctors>,
   ) {}
 
@@ -44,13 +45,19 @@ export class DoctorsService {
         specilisation,
         is_online
       });
-      return this.doctorRepo.save(doctor);
+      await this.doctorRepo.save(doctor);
+
+      return this.responseService.successResponse("Doctor created successfully", doctor);
+      
     } catch (error) {
       if (error.code === 'ER_DUP_ENTRY') {
         // Adjust error code based on your database
-        throw new BadRequestException('A user with that email already exists.');
+        // throw new BadRequestException('A user with that email already exists.');
+        return this.responseService.errorResponse("A user with that email already exists.");
+      }else{
+        return this.responseService.errorResponse("Something went wrong");
       }
-      throw error; // Re-throw other errors
+      // throw error; // Re-throw other errors
     }
   }
 }

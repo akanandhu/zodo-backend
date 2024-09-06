@@ -42,7 +42,7 @@ export class DoctorsController {
 
   @Post("logout")
     logout(@Req() req: Request) {
-      console.log(this.authServices);
+      console.log(req.user);
         // return this.authServices.logout(req.user['sub'])
     }
 }

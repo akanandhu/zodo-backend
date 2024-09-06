@@ -17,7 +17,8 @@ export class AuthService {
         @InjectRepository(Users) private userRepository: Repository<Users>, private utilsService: UtilsService, private responseService: ResponseService) { }
 
     async signIn(signInDto: SignInDto, headers: any) {
-        const user = await this.validateUser(signInDto, headers)
+        const user = await this.validateUser(signInDto, headers);
+        console.log("USER",user);
         if (user) {
             const tokens = await this.getTokens((await user).id, (await user).email)
             await this.updateRefreshToken(user.id, tokens.refreshToken)
@@ -34,6 +35,7 @@ export class AuthService {
     async validateUser(signInDto: SignInDto, headers: any): Promise<Users> {
         const { email, password } = signInDto
         const user = await this.userService.findOneWithEmail(email);
+        
         if (user && (await bcrypt.compare(password, user.password))) {
             return user
         }
